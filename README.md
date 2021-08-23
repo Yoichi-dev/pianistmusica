@@ -25,6 +25,7 @@ git clone https://github.com/Yoichi-dev/pianistmusica.git
 cd pianistmusica
 node index.js
 ```
+または `start.cmd` を実行
 
 
 # Author

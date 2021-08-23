@@ -56,12 +56,12 @@ const countDown = () => {
     // ミュートになっている時だけカウント
     if (obsBgmMuteFlg) {
         if (count != 3) {
-            console.log(`無演奏カウント：${count}`)
+            console.log(`無演奏カウント：${count}`);
         }
         count--;
         if (count < 0) {
             obsBgmMuteFlg = false;
-            console.log('OBSミュート解除')
+            console.log('OBSミュート解除');
             changeMute('SetMute', BGM_NAME, obsBgmMuteFlg);
             count = notPlayTime;
         }
@@ -77,7 +77,7 @@ midiDevice.on('message', (deltaTime, message) => {
     if (!obsBgmMuteFlg) {
         obsBgmMuteFlg = true;
         // ミュート切り替え
-        console.log('OBSミュート設定')
+        console.log('OBSミュート設定');
         changeMute('SetMute', BGM_NAME, obsBgmMuteFlg);
     }
     // カウントを元に
@@ -104,5 +104,6 @@ function changeMute(methodNm, sourceNm, mute) {
 }
 
 // 今は「Ctrl + C」で終了
+console.log('「Ctrl + C」で終了');
 // obs.disconnect();
 // midiDevice.closePort();
