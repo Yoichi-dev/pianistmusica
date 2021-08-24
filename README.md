@@ -7,6 +7,8 @@
 - [OBS](https://obsproject.com/ja)
 - [obs-websocket](https://github.com/Palakis/obs-websocket)
 - [Node.js](https://nodejs.org/ja/)
+- [Python](https://www.python.org/)
+- [Desktop development with C++](https://github.com/nodejs/node-gyp#on-windows)
 
 
 # Demo

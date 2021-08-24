@@ -73,6 +73,12 @@ setInterval(countDown, 1000);
 
 // MIDIメッセージを監視（演奏しているか）
 midiDevice.on('message', (deltaTime, message) => {
+
+    // [ 254 ] を無視する
+    if (String(message) == '254') {
+        return
+    }
+
     // BGMをミュートに
     if (!obsBgmMuteFlg) {
         obsBgmMuteFlg = true;
@@ -80,6 +86,7 @@ midiDevice.on('message', (deltaTime, message) => {
         console.log('OBSミュート設定');
         changeMute('SetMute', BGM_NAME, obsBgmMuteFlg);
     }
+
     // カウントを元に
     count = notPlayTime;
 });
