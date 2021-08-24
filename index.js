@@ -24,8 +24,8 @@ const midiDevice = new midi.Input();
 
 try {
     midiDevice.getPortCount();
-    midiDevice.getPortName(0);
-    midiDevice.openPort(0);
+    midiDevice.getPortName(1);
+    midiDevice.openPort(1);
     midiDevice.ignoreTypes(false, false, false);
     console.log('MIDIキーボード接続成功');
 } catch (err) {
