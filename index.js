@@ -4,14 +4,12 @@ const obs = new OBSWebSocket();
 
 // MIDIキーボード関連
 const midi = require('midi');
-const { output } = require('midi');
 
 // OBSのBGMミュートフラグ
 let obsBgmMuteFlg = false;
 
 // カウント秒数
 const notPlayTime = 3;
-console.log(`${notPlayTime}秒間ピアノ演奏がないとBGMがオンになります`)
 
 // OBS情報
 const OBS_ADDRESS = 'localhost:4444'; // デフォルト
@@ -76,6 +74,8 @@ obs.connect({
     .catch(err => {
         console.log(err);
     });
+
+console.log(`${notPlayTime}秒間ピアノ演奏がないとBGMがオンになります`)
 
 // BGM復帰秒数
 let count = notPlayTime;
