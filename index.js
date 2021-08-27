@@ -4,6 +4,7 @@ const obs = new OBSWebSocket();
 
 // MIDIキーボード関連
 const midi = require('midi');
+const { output } = require('midi');
 
 // OBSのBGMミュートフラグ
 let obsBgmMuteFlg = false;
@@ -16,23 +17,51 @@ console.log(`${notPlayTime}秒間ピアノ演奏がないとBGMがオンにな�
 const OBS_ADDRESS = 'localhost:4444'; // デフォルト
 const PASSWORD = 'P@ssW0rd!'; // 例
 
+// MIDI情報
+const inputMidiName = 'RD Series';
+const outputMidiName = 'loopMIDI Port';
+
 // BGMソースの名称
 const BGM_NAME = 'BGM';
 
-// 接続されている端末取得
-const midiDevice = new midi.Input();
+// 規定オープンフラグ
+let inputOpenFlg = false;
+let outputOpenFlg = false;
 
-try {
-    midiDevice.getPortCount();
-    midiDevice.getPortName(1);
-    midiDevice.openPort(1);
-    midiDevice.ignoreTypes(false, false, false);
-    console.log('MIDIキーボード接続成功');
-} catch (err) {
-    console.log(`MIDI error : ${err}`);
-    obs.disconnect();
-    midiDevice.closePort();
-    // 強制終了
+// 接続されている端末取得
+const inputMidiDevice = new midi.Input();
+
+// MIDIの受信ポートがいくつあるかを調べる
+const inputList = inputMidiDevice.getPortCount();
+
+// 入力デバイスオープン
+for (let i = 0; i < inputList; i++) {
+    if (inputMidiDevice.getPortName(i) == inputMidiName) {
+        // オープン
+        inputMidiDevice.openPort(i);
+        console.log('入力オープン成功');
+        inputOpenFlg = true;
+    }
+}
+
+// 出力先
+const outputMidiDevice = new midi.output();
+
+// 出力ポート一覧取得
+const outputList = outputMidiDevice.getPortCount();
+
+// 出力デバイスオープン
+for (let i = 0; i < outputList; i++) {
+    if (outputMidiDevice.getPortName(i) == outputMidiName) {
+        // オープン
+        outputMidiDevice.openPort(i);
+        console.log('出力オープン成功');
+        outputOpenFlg = true;
+    }
+}
+
+if (!inputOpenFlg || !outputOpenFlg) {
+    console.log('入出力のオープンに失敗しました');
     process.exit(1);
 }
 
@@ -72,7 +101,7 @@ const countDown = () => {
 setInterval(countDown, 1000);
 
 // MIDIメッセージを監視（演奏しているか）
-midiDevice.on('message', (deltaTime, message) => {
+inputMidiDevice.on('message', (deltaTime, message) => {
 
     // [ 254 ] を無視する
     if (String(message) == '254') {
@@ -86,6 +115,8 @@ midiDevice.on('message', (deltaTime, message) => {
         console.log('OBSミュート設定');
         changeMute('SetMute', BGM_NAME, obsBgmMuteFlg);
     }
+
+    outputMidiDevice.sendMessage(message);
 
     // カウントを元に
     count = notPlayTime;
