@@ -16,7 +16,7 @@ const OBS_ADDRESS = 'localhost:4444'; // デフォルト
 const PASSWORD = 'P@ssW0rd!'; // 例
 
 // MIDI情報
-const inputMidiName = 'RD Series';
+const inputMidiName = 'CASIO USB-MIDI';
 const outputMidiName = 'loopMIDI Port';
 
 // BGMソースの名称
