@@ -1,0 +1,8 @@
+{
+    "obsAddress": "localhost:4444",
+    "password": "P@ssW0rd!",
+    "notPlayTime": 3,
+    "inputMidiName": "CASIO USB-MIDI",
+    "outputMidiName": "loopMIDI Port",
+    "bgmName": "BGM"
+}

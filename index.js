@@ -5,22 +5,27 @@ const obs = new OBSWebSocket();
 // MIDIキーボード関連
 const midi = require('midi');
 
+const fs = require('fs');
+let setting = fs.readFileSync("setting.txt", { encoding: 'utf-8' });
+
+let settingJson = JSON.parse(setting);
+
 // OBSのBGMミュートフラグ
 let obsBgmMuteFlg = false;
 
 // カウント秒数
-const notPlayTime = 3;
+const notPlayTime = settingJson.notPlayTime;
 
 // OBS情報
-const OBS_ADDRESS = 'localhost:4444'; // デフォルト
-const PASSWORD = 'P@ssW0rd!'; // 例
+const OBS_ADDRESS = settingJson.obsAddress;
+const PASSWORD = settingJson.password;
 
 // MIDI情報
-const inputMidiName = 'CASIO USB-MIDI';
-const outputMidiName = 'loopMIDI Port';
+const inputMidiName = settingJson.inputMidiName;
+const outputMidiName = settingJson.outputMidiName;;
 
 // BGMソースの名称
-const BGM_NAME = 'BGM';
+const BGM_NAME = settingJson.bgmName;
 
 // 規定オープンフラグ
 let inputOpenFlg = false;
@@ -104,7 +109,8 @@ setInterval(countDown, 1000);
 inputMidiDevice.on('message', (deltaTime, message) => {
 
     // [ 254 ] を無視する
-    if (String(message) == '254') {
+    // [ 64 ] を無視する（多分ダンパーペダル）
+    if (String(message) == '254' || String(message) == '64') {
         return
     }
 
