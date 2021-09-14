@@ -68,6 +68,8 @@ if (!inputOpenFlg || !outputOpenFlg) {
     process.exit(1);
 }
 
+// OBS接続試行
+// 失敗時5秒毎に接続確認を行う
 // OBS接続情報設定
 obs.connect({
     address: OBS_ADDRESS,
@@ -77,7 +79,22 @@ obs.connect({
         console.log('OBS接続成功');
     })
     .catch(err => {
-        console.log(err);
+        console.log('OBS接続失敗');
+        console.log('接続再試行します');
+        let checkStreaming = setInterval(() => {
+            obs.connect({
+                address: OBS_ADDRESS,
+                password: PASSWORD
+            })
+                .then(() => {
+                    console.log('OBS接続成功');
+                    clearInterval(checkStreaming);
+                })
+                .catch(err => {
+                    console.log('OBS接続失敗');
+                    console.log('接続再試行します');
+                });
+        }, 5000);
     });
 
 console.log(`${notPlayTime}秒間ピアノ演奏がないとBGMがオンになります`)
